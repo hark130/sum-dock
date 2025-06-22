@@ -346,6 +346,30 @@ START_TEST(test_n12_not_fun_puzzle)
 END_TEST
 
 
+// Take from: https://sudoku.com/hard/
+// Manually execute this test case: ./code/dist/sum_dock.bin " 7 6293  3   5        7   14 7    13   2   87 8  9   4 32 86   5  4    2  49 2  8"
+START_TEST(test_n13_hard_sudoku_2)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENOERR;  // Expected return value for this test case
+    char *exp_result = NULL;  // Expected results for this test case
+    // The sudoku puzzle for this test case
+    char test_input[81] = { " 7 6293  "
+                            "3   5    "
+                            "    7   1"
+                            "4 7    13"
+                            "   2   87"
+                            " 8  9   4"
+                            " 32 86   "
+                            "5  4    2"
+                            "  49 2  8" };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
 /**************************************************************************************************/
 /**************************************** ERROR TEST CASES ****************************************/
 /**************************************************************************************************/
@@ -724,6 +748,7 @@ Suite *create_test_suite(void)
     tcase_add_test(tc_normal, test_n10_difficult_puzzle_1);
     tcase_add_test(tc_normal, test_n11_difficult_puzzle_2);
     tcase_add_test(tc_normal, test_n12_not_fun_puzzle);
+    tcase_add_test(tc_normal, test_n13_hard_sudoku_2);
     tcase_add_test(tc_error, test_e01_invalid_char_nul);
     tcase_add_test(tc_error, test_e02_invalid_char_zero);
     tcase_add_test(tc_error, test_e03_invalid_char_letter);
