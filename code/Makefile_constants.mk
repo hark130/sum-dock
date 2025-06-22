@@ -21,6 +21,8 @@ HDR_DIR = include
 SRC_DIR = src
 # Name of the distribution directory
 DST_DIR = dist
+# Name of the test code directory
+TEST_DIR = test
 
 ### OS-DYNAMIC VARIABLES ###
 # $(CHECK) - Checkmark

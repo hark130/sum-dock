@@ -23,15 +23,17 @@ CODE_DIR = code
 MF_ARGS = --directory=$(CODE_DIR)
 CALL_MAKE = @$(MAKE) --no-print-directory
 
-.PHONY: all compile clean
+.PHONY: all compile clean test validate
 
 
 ##########################
 ##### MAKEFILE RULES #####
 ##########################
 all:
+	$(CALL_MAKE) validate
 	$(CALL_MAKE) clean
 	$(CALL_MAKE) compile
+	$(CALL_MAKE) test
 
 compile:
 	@echo ""
@@ -42,3 +44,13 @@ clean:
 	@echo ""
 	@echo "CLEANING"
 	$(CALL_MAKE) $(MF_ARGS) clean
+
+test:
+	@echo ""
+	@echo "TESTING"
+	$(CALL_MAKE) $(MF_ARGS) test
+
+validate:
+	@echo ""
+	@echo "VALIDATING"
+	$(CALL_MAKE) $(MF_ARGS) validate

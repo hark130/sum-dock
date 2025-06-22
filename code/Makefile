@@ -19,18 +19,23 @@ else
 include Makefile_linux.mk
 endif
 
-.PHONY: all clean compile
+.PHONY: all clean compile test validate
 
 
 ##########################
 ##### MAKEFILE RULES #####
 ##########################
 all:
-	$(CALL_MAKE) _clean
-	$(CALL_MAKE) _compile
+	$(CALL_MAKE) _all
 
 clean:
 	$(CALL_MAKE) _clean
 
 compile:
 	$(CALL_MAKE) _compile
+
+test:
+	$(CALL_MAKE) _test
+
+validate:
+	$(CALL_MAKE) _validate
