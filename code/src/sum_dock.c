@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
         {
             printf("The game logic encountered an error: %s?!\n", strerror(results));
         }
-        results = print_board(game_board);
+        print_board(game_board);
     }
 
     // CLEANUP
