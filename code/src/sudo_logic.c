@@ -267,7 +267,7 @@ char check_for_match(char board[9][9], int row, int col, int *errnum)
     // Find overlap
     if (ENOERR == results)
     {
-        results = ENODATA;  // Default condition
+        results = ENODATA;  // Now using this variable to keep track of multiple solutions
         for (int row_index = 0; row_index < 9; row_index++)
         {
             if ('\0' == miss_row[row_index])
@@ -290,35 +290,52 @@ char check_for_match(char board[9][9], int row, int col, int *errnum)
                     {
                         break;  // End of line
                     }
-                    else if (miss_row[col_index] != miss_grd[grid_index])
+                    else if (miss_col[col_index] != miss_grd[grid_index])
                     {
                         continue;  // Not a match... keep looking
                     }
                     else
                     {
-                        FPRINTF_ERR("FOUND A MATCH BETWEEN %c AND %c AND %c!\n", miss_row[row_index], miss_col[col_index], miss_grd[grid_index]);  // DEBUGGING
-                        overlap = miss_grd[grid_index];  // Found it!
-                        results = ENOERR;  // Success
-                        break;
+                        // FPRINTF_ERR("FOUND A MATCH BETWEEN ROW %d AND COL %d: %c!\n", row, col, miss_grd[grid_index]);  // DEBUGGING
+                        if (ENOERR == results)
+                        {
+                            results = ENODATA;  // A second solution was found so...
+                            overlap = '\0';     // ...this is not the answer.
+                            goto done;          // Time to stop looking.
+                        }
+                        else
+                        {
+                            overlap = miss_grd[grid_index];  // Found one!
+                            results = ENOERR;  // Success
+                        }
                     }
                 }
-                if (ENOERR == results)
-                {
-                    break;  // Found it!
-                }
+                // if (ENOERR == results)
+                // {
+                //     break;  // Found it!
+                // }
             }
-            if (ENOERR == results)
-            {
-                break;  // Found it!
-            }
+            // if (ENOERR == results)
+            // {
+            //     break;  // Found it!
+            // }
         }
     }
 
     // DONE
+done:
     if (NULL != errnum)
     {
         *errnum = results;
     }
+    /* DEBUGGING */
+    if (ENOERR == results)
+    {
+        FPRINTF_ERR("MISSING ROW %d CONTENTS AFTER:  %s\n", row, miss_row);  // DEBUGGING
+        FPRINTF_ERR("MISSING COL %d CONTENTS AFTER:  %s\n", col, miss_col);  // DEBUGGING
+        FPRINTF_ERR("MISSING ROW %d COL %d CONTENTS AFTER:  %s\n", row, col, miss_grd);  // DEBUGGING
+    }
+    /* DEBUGGING */
     return overlap;
 }
 
@@ -573,7 +590,22 @@ int make_a_match(char board[9][9], int row, int col)
         match = check_for_match(board, row, col, &results);
         if ('\0' != match && ENOERR == results)
         {
+            FPRINTF_ERR("FOUND SOLUTION AT ROW %d COL %d: %c\n", row, col, match);
             board[row][col] = match;
+            /* DEBUGGING */
+            for (int row_index = 0; row_index < 9; row_index++)
+            {
+                for (int col_index = 0; col_index < 9; col_index++)
+                {
+                    if (0 == col_index)
+                    {
+                        printf("\n");
+                    }
+                    printf("%c", board[row_index][col_index]);
+                }
+            }
+            printf("\n");
+            /* DEBUGGING */
         }
     }
     else if (ENOERR == results)
