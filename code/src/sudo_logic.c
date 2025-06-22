@@ -610,18 +610,18 @@ int make_a_match(char board[9][9], int row, int col)
             // FPRINTF_ERR("FOUND SOLUTION AT ROW %d COL %d: %c\n", row, col, match);  // DEBUGGING
             board[row][col] = match;
             /* DEBUGGING */
-            for (int row_index = 0; row_index < 9; row_index++)
-            {
-                for (int col_index = 0; col_index < 9; col_index++)
-                {
-                    if (0 == col_index)
-                    {
-                        printf("\n");
-                    }
-                    printf("%c", board[row_index][col_index]);
-                }
-            }
-            printf("\n");
+            // for (int row_index = 0; row_index < 9; row_index++)
+            // {
+            //     for (int col_index = 0; col_index < 9; col_index++)
+            //     {
+            //         if (0 == col_index)
+            //         {
+            //             printf("\n");
+            //         }
+            //         printf("%c", board[row_index][col_index]);
+            //     }
+            // }
+            // printf("\n");
             /* DEBUGGING */
         }
     }
