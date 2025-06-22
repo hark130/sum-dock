@@ -310,15 +310,7 @@ char check_for_match(char board[9][9], int row, int col, int *errnum)
                         }
                     }
                 }
-                // if (ENOERR == results)
-                // {
-                //     break;  // Found it!
-                // }
             }
-            // if (ENOERR == results)
-            // {
-            //     break;  // Found it!
-            // }
         }
     }
 
@@ -329,12 +321,12 @@ done:
         *errnum = results;
     }
     /* DEBUGGING */
-    if (ENOERR == results)
-    {
-        FPRINTF_ERR("MISSING ROW %d CONTENTS AFTER:  %s\n", row, miss_row);  // DEBUGGING
-        FPRINTF_ERR("MISSING COL %d CONTENTS AFTER:  %s\n", col, miss_col);  // DEBUGGING
-        FPRINTF_ERR("MISSING ROW %d COL %d CONTENTS AFTER:  %s\n", row, col, miss_grd);  // DEBUGGING
-    }
+    // if (ENOERR == results)
+    // {
+    //     FPRINTF_ERR("MISSING ROW %d CONTENTS AFTER:  %s\n", row, miss_row);  // DEBUGGING
+    //     FPRINTF_ERR("MISSING COL %d CONTENTS AFTER:  %s\n", col, miss_col);  // DEBUGGING
+    //     FPRINTF_ERR("MISSING ROW %d COL %d CONTENTS AFTER:  %s\n", row, col, miss_grd);  // DEBUGGING
+    // }
     /* DEBUGGING */
     return overlap;
 }
@@ -631,6 +623,7 @@ int solve_strategy_one(char board[81])
         {
             for (int col = 0; col < 9; col++)
             {
+                // FPRINTF_ERR("EVALUATING ROW %d COL %d\n", row, col);  // DEBUGGING
                 results = make_a_match(game, row, col);
                 // FPRINTF_ERR("make_a_match() returned [%d] %s\n", results, strerror(results));  // DEBUGGING
                 if (ENODATA != results)
