@@ -2,9 +2,11 @@
  *  Defines main() for the sum_dock binary.
  */
 
-#define SUDO_DEBUG                          // Enable DEBUG logging
+// #define SUDO_DEBUG                          // Enable DEBUG logging
 
-#include "errno.h"                          // EINVAL
+#include <errno.h>                          // EINVAL
+#include <stdio.h>                          // printf()
+#include <string.h>                         // strerror()
 #include "sudo_board.h"                     // create_board()
 #include "sudo_debug.h"                     // MODULE_LOAD(), MODULE_UNLOAD()
 #include "sudo_logic.h"                     // solve_board()
@@ -86,7 +88,7 @@ int main(int argc, char *argv[])
     }
 
     // DONE
-    if (ENOERR != results && ENODATA == results)
+    if (ENOERR != results && ENODATA != results)
     {
         print_usage(argv[0]);
     }
