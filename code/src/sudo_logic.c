@@ -6,6 +6,7 @@
 
 #include <errno.h>                          // EINVAL, ENODATA
 #include <stdbool.h>                        // bool, false, true
+#include <stdio.h>                          // DEBUGGING
 #include <string.h>                         // memset()
 #include "sudo_debug.h"                     // MODULE_*LOAD(), PRINT_ERRNO(), PRINT_ERROR()
 #include "sudo_macros.h"                    // ENOERR
@@ -179,19 +180,18 @@ int validate_row_and_col(int row, int col);
 /**************************************************************************************************/
 
 
-bool is_game_over(char board[81])
+int is_game_over(char board[81])
 {
     // LOCAL VARIABLES
     int results = validate_board(board);   // Input validation
     char (*game)[9] = (char (*)[9])board;  // Cast it to a two-dimensional array
 
     // IS IT OVER?
+    // PRINT_ERROR(HERE);  // DEBUGGING
     if (ENOERR == results)
     {
         results = is_game_really_over(game);
     }
-
-    // TO DO: DON'T DO NOW... verify each column, row, and grid only has one of each character
 
     // DONE
     return results;
@@ -551,18 +551,23 @@ int is_game_really_over(char board[9][9])
     int results = ENOERR;  // Results of execution
 
     // IS IT REALLY OVER?
-    for (int row = 0; row < 3; row++)
+    // PRINT_ERROR(HERE);  // DEBUGGING
+    for (int row = 0; row < 9; row++)
     {
-        for (int col = 0; col < 3; col++)
+        for (int col = 0; col < 9; col++)
         {
             if (SUDO_EMPTY_GRID == board[row][col])
             {
+                // FPRINTF_ERR("FOUND AN EMPTY GRID AT ROW %d COL %d\n", row, col);  // DEBUGGING
                 results = ENODATA;  // There's an empty grid
+                goto done;  // No need to search for anymore empty grids
             }
         }
     }
 
     // DONE
+done:
+    // FPRINTF_ERR("ABOUT TO RETURN [%d] '%s' from %s\n", results, strerror(results), __FUNCTION_NAME__);  // DEBUGGING
     return results;
 }
 
@@ -640,9 +645,19 @@ int solve_strategy_one(char board[81])
         // Respond to results
         if (ENOERR == results)  // Made a play
         {
-            if (ENODATA == is_game_really_over(game))
+            results = is_game_really_over(game);  // Is it over yet?
+            if (ENODATA == results)
             {
                 continue;  // Game's not over yet
+            }
+            else if (ENOERR == results)
+            {
+                break;  // Game over man!
+            }
+            else
+            {
+                PRINT_ERROR(is_game_really_over identified an error);
+                break;  // Encountered an error
             }
         }
         else if (ENODATA == results)  // Made a full loop without a play
