@@ -46,7 +46,7 @@ fi
 if [[ $EXIT_CODE -eq 0 ]]
 then
     echo -e "\n\nUPDATING PRODUCTION CODE"
-    for sudo_source_file in $(ls $SRC_CODE_DIR/sudo_*$SRC_FILE_EXT 2> /dev/null)
+    for sudo_source_file in $(ls $SRC_CODE_DIR/*$SRC_FILE_EXT 2> /dev/null)
     do
         # Comments out the SUDO_DEBUG macro, in place, after backing up the original source in-place
         sed -i"./*$BAK_FILE_EXT" 's/^#define SUDO_DEBUG/\/\/ #define SUDO_DEBUG/g' $sudo_source_file
