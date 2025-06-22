@@ -77,6 +77,7 @@ END_TEST
 
 
 // Take from: https://sudoku.com/medium/
+// Manually execute this test case: ./code/dist/sum_dock.bin "415 782  7 3 29 81   5 14  396  5       326    4 963  6  98  35 31    46 4    72 "
 START_TEST(test_n02_medium_sudoku)
 {
     // LOCAL VARIABLES
@@ -100,6 +101,7 @@ END_TEST
 
 
 // Take from: https://sudoku.com/hard/
+// Manually execute this test case: ./code/dist/sum_dock.bin " 5   3   9 6    783   28  1        7 136 298 8 2    1   91   3 28       7 52   96"
 START_TEST(test_n03_hard_sudoku)
 {
     // LOCAL VARIABLES
@@ -115,6 +117,177 @@ START_TEST(test_n03_hard_sudoku)
                             "  91   3 "
                             "28       "
                             "7 52   96" };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+START_TEST(test_n04_expert_sudoku)
+{
+
+}
+END_TEST
+
+
+START_TEST(test_n05_master_sudoku)
+{
+
+}
+END_TEST
+
+
+START_TEST(test_n06_extreme_sudoku)
+{
+
+}
+END_TEST
+
+
+// Taken from: https://sandiway.arizona.edu/sudoku/examples.html
+// Manually execute this test case: ./code/dist/sum_dock.bin "   26 7 168  7  9 19   45  82 1   4   46 29   5   3 23  93   74 4  5  367 3 18   "
+START_TEST(test_n07_easiest_puzzle_1)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENOERR;  // Expected return value for this test case
+    // Expected results for this test case
+    char *exp_result = "435269781682571493197834562826195347374682915951743628519326874248957136763418259";
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "   26 7 1"
+                            "68  7  9 "
+                            "19   45  "
+                            "82 1   4 "
+                            "  46 29  "
+                            " 5   3 23"
+                            "  93   74"
+                            " 4  5  36"
+                            "7 3 18   " };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+// Taken from: https://sandiway.arizona.edu/sudoku/examples.html
+// Manually execute this test case: ./code/dist/sum_dock.bin "1  489  673     4      1295  712 6  5  7 3  8  6 957  9146      2     378  512  4"
+START_TEST(test_n08_easiest_puzzle_2)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENOERR;  // Expected return value for this test case
+    // Expected results for this test case
+    char *exp_result = "152489376739256841468371295387124659591763428246895713914637582625948137873512964";
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "1  489  6"
+                            "73     4 "
+                            "     1295"
+                            "  712 6  "
+                            "5  7 3  8"
+                            "  6 957  "
+                            "9146     "
+                            " 2     37"
+                            "8  512  4" };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+// Taken from: https://sandiway.arizona.edu/sudoku/examples.html
+// Manually execute this test case: ./code/dist/sum_dock.bin " 2 6 8   58   97      4    37    5  6       4  8    13    2      98   36   3 6 9 "
+START_TEST(test_n09_intermediate_puzzle)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENOERR;  // Expected return value for this test case
+    // Expected results for this test case
+    char *exp_result = "123678945584239761967145328372461589691583274458792613836924157219857436745316892";
+    // The sudoku puzzle for this test case
+    char test_input[81] = { " 2 6 8   "
+                            "58   97  "
+                            "    4    "
+                            "37    5  "
+                            "6       4"
+                            "  8    13"
+                            "    2    "
+                            "  98   36"
+                            "   3 6 9 " };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+// Taken from: https://sandiway.arizona.edu/sudoku/examples.html
+// Manually execute this test case: ./code/dist/sum_dock.bin "   6  4  7    36      91 8           5 18   3   3 6 45 4 2   6 9 3       2    1  "
+START_TEST(test_n10_difficult_puzzle_1)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENOERR;  // Expected return value for this test case
+    // Expected results for this test case
+    char *exp_result = "581572439792843651364591782438957216256184973179326845845219367913768524627435198";
+    // The sudoku puzzle for this test case
+    char test_input[81] = { " 2 6 8   "
+                            "58   97  "
+                            "    4    "
+                            "37    5  "
+                            "6       4"
+                            "  8    13"
+                            "    2    "
+                            "  98   36"
+                            "   3 6 9 " };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+// Taken from: https://sandiway.arizona.edu/sudoku/examples.html
+// Manually execute this test case: ./code/dist/sum_dock.bin "2  3     8 4 62  3 138  2      2 39 5 7   621 32  6    2   914 6 125 8 9     1  2"
+START_TEST(test_n11_difficult_puzzle_2)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENOERR;  // Expected return value for this test case
+    // Expected results for this test case
+    char *exp_result = "276314958854962713913875264468127395597438621132596487325789146641253879789641532";
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "2  3     "
+                            "8 4 62  3"
+                            " 138  2  "
+                            "    2 39 "
+                            "5 7   621"
+                            " 32  6   "
+                            " 2   914 "
+                            "6 125 8 9"
+                            "     1  2" };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+// Taken from: https://sandiway.arizona.edu/sudoku/examples.html
+// Manually execute this test case: ./code/dist/sum_dock.bin " 2          6    3 74 8         3  2 8  4  1 6  5         1 78 5    9          4 "
+START_TEST(test_n12_not_fun_puzzle)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENOERR;  // Expected return value for this test case
+    // Expected results for this test case
+    char *exp_result = "126437958895621473374985126457193862983246517612578394269314785548769231731852649";
+    // The sudoku puzzle for this test case
+    char test_input[81] = { " 2       "
+                            "   6    3"
+                            " 74 8    "
+                            "     3  2"
+                            " 8  4  1 "
+                            "6  5     "
+                            "    1 78 "
+                            "5    9   "
+                            "       4 " };
 
     // RUN TEST
     run_test_case(test_input, exp_result, exp_return);
@@ -491,6 +664,15 @@ Suite *create_test_suite(void)
     tcase_add_test(tc_normal, test_n01_easy_sudoku);
     tcase_add_test(tc_normal, test_n02_medium_sudoku);
     tcase_add_test(tc_normal, test_n03_hard_sudoku);
+    tcase_add_test(tc_normal, test_n04_expert_sudoku);
+    tcase_add_test(tc_normal, test_n05_master_sudoku);
+    tcase_add_test(tc_normal, test_n06_extreme_sudoku);
+    tcase_add_test(tc_normal, test_n07_easiest_puzzle_1);
+    tcase_add_test(tc_normal, test_n08_easiest_puzzle_2);
+    tcase_add_test(tc_normal, test_n09_intermediate_puzzle);
+    tcase_add_test(tc_normal, test_n10_difficult_puzzle_1);
+    tcase_add_test(tc_normal, test_n11_difficult_puzzle_2);
+    tcase_add_test(tc_normal, test_n12_not_fun_puzzle);
     tcase_add_test(tc_error, test_e01_invalid_char_nul);
     tcase_add_test(tc_error, test_e02_invalid_char_zero);
     tcase_add_test(tc_error, test_e03_invalid_char_letter);
