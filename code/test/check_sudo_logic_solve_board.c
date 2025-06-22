@@ -53,6 +53,7 @@ void run_test_case(char test_input[81], char exp_solution[81], int exp_return);
 
 
 // Take from: https://sudoku.com/easy/
+// Manually execute this test case: ./code/dist/sum_dock.bin " 683 9 7  42     11 7 5 6    5 7 12 7    158     3 74    19 2 58 162 39 9  543 1 "
 START_TEST(test_n01_easy_sudoku)
 {
     // LOCAL VARIABLES
@@ -250,6 +251,72 @@ START_TEST(test_e06_bad_pointer)
 END_TEST
 
 
+START_TEST(test_e07_invalid_board_row_dupe)
+{
+    // LOCAL VARIABLES
+    int exp_return = EINVAL;  // Expected return value for this test case
+    char *exp_result = NULL;  // Expected results for this test case
+    // The sudoku puzzle for this test case
+    char test_input[81] = { " 683 9 7 "
+                            " 42     1"
+                            "1 7 5 6  "
+                            "  5 7 12 "
+                            "7    158 "
+                            "    3 34 "  // <-- HERE
+                            "   19 2 5"
+                            "8 162 39 "
+                            "9  543 1 " };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+START_TEST(test_e08_invalid_board_col_dupe)
+{
+    // LOCAL VARIABLES
+    int exp_return = EINVAL;  // Expected return value for this test case
+    char *exp_result = NULL;  // Expected results for this test case
+    // The sudoku puzzle for this test case
+    char test_input[81] = { " 683 9 7 "
+                            " 42     1"
+                            "1 7 5 6  "
+                            "  5 7 12 "
+                            "7    158 "  // <-- COL 7 HERE...
+                            "    3 74 "
+                            "   19 2 5"
+                            "8 162 59 "  // <-- ...AND COL 7 HERE
+                            "9  543 1 " };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+START_TEST(test_e09_invalid_board_grid_dupe)
+{
+    // LOCAL VARIABLES
+    int exp_return = EINVAL;  // Expected return value for this test case
+    char *exp_result = NULL;  // Expected results for this test case
+    // The sudoku puzzle for this test case
+    char test_input[81] = { " 5   3   "
+                            "9 6    78"
+                            "3   28  1"
+                            "        7"
+                            " 136 298 "
+                            "8 2    1 "
+                            "  91   6 "     // <-- COL 8 HERE...
+                            "28       "
+                            "7 52   96" };  // <-- ...AND COL 9 HERE
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
 /**************************************************************************************************/
 /************************************** BOUNDARY TEST CASES ***************************************/
 /**************************************************************************************************/
@@ -430,6 +497,9 @@ Suite *create_test_suite(void)
     tcase_add_test(tc_error, test_e04_invalid_char_tab);
     tcase_add_test(tc_error, test_e05_invalid_char_newline);
     tcase_add_test(tc_error, test_e06_bad_pointer);
+    tcase_add_test(tc_error, test_e07_invalid_board_row_dupe);
+    tcase_add_test(tc_error, test_e08_invalid_board_col_dupe);
+    tcase_add_test(tc_error, test_e09_invalid_board_grid_dupe);
     tcase_add_test(tc_boundary, test_b01_solved);
     tcase_add_test(tc_boundary, test_b02_almost_solved);
     tcase_add_test(tc_boundary, test_b03_almost_empty);
