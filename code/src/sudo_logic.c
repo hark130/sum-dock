@@ -1,0 +1,472 @@
+/*
+ *  This library defines game logic functionality to solve a game board.
+ */
+
+#define SUDO_DEBUG                          // Enable DEBUG logging
+
+#include <errno.h>                          // EINVAL, ENODATA
+#include <stdbool.h>                        // bool, false, true
+#include <string.h>                         // memset()
+#include "sudo_debug.h"                     // MODULE_*LOAD(), PRINT_ERRNO(), PRINT_ERROR()
+#include "sudo_macros.h"                    // ENOERR
+#include "sudo_validation.h"                // validate_board()
+
+
+MODULE_LOAD();  // Print the module name being loaded using the gcc constructor attribute
+MODULE_UNLOAD();  // Print the module name being unloaded using the gcc destructor attribute
+
+
+/**************************************************************************************************/
+/********************************* PRIVATE FUNCTION DECLARATIONS **********************************/
+/**************************************************************************************************/
+
+/*
+ *  Description:
+ *      STRATEGY 1: If ~[ROW SET] && ~[COL SET] && ~[GRID SET] is one value?
+ *      This function (almost) does *NOT* validate anything!
+ *
+ *  Args:
+ *      board: A two-dimenstional array.
+ *      row: The row index.
+ *      col: The column index.
+ *      errnum: [Out] Provide feedback on execution.
+ *
+ *  Returns:
+ *      The available play on success (errnum is set to ENOERR).  Nul character if no solution was
+ *      found (errnum is set to ENODATA).  Nul character on error (errnum is set with errno).
+ */
+char check_for_match(char board[9][9], int row, int col, int *errnum);
+
+/*
+ *  Description:
+ *      Fill the miss_row array with all the characters missing from board[row]*.
+ *
+ *  Args:
+ *      board: A two-dimenstional array.
+ *      miss_col: An array to fill with missing characters.
+ *      col: The col index.
+ *
+ *  Returns:
+ *      ENOERR on success, errno value on error.
+ */
+int fill_missing_col(char board[9][9], char miss_col[9], int col);
+
+/*
+ *  Description:
+ *      Fill the miss_row array with all the characters missing from board[row]*.
+ *
+ *  Args:
+ *      board: A two-dimenstional array.
+ *      miss_grid: An array to fill with missing characters.
+ *      row: The row index.
+ *      col: The col index.
+ *
+ *  Returns:
+ *      ENOERR on success, errno value on error.
+ */
+int fill_missing_grid(char board[9][9], char miss_grid[9], int row, int col);
+
+/*
+ *  Description:
+ *      Fill the miss_row array with all the characters missing from board[row]*.
+ *
+ *  Args:
+ *      board: A two-dimenstional array.
+ *      miss_row: An array to fill with missing characters.
+ *      row: The row index.
+ *
+ *  Returns:
+ *      ENOERR on success, errno value on error.
+ */
+int fill_missing_row(char board[9][9], char miss_row[9], int row);
+
+/*
+ *  Description:
+ *      Determine if the intersection of row and col is empty.  This function does not validate
+ *      the game board but does validate row and col.
+ *
+ *  Args:
+ *      board: A two-dimenstional array.
+ *      row: The row index.
+ *      col: The column index.
+ *      errnum: [Out] Provide feedback on execution.
+ *
+ *  Returns:
+ *      Returns true if the intersection is empty, false otherwise.  On error, returns false and
+ *      sets errnum with an errno value.
+ */
+bool is_empty_intersection(char board[9][9], int row, int col, int *errnum);
+
+/*
+ *  Description:
+ *      Is the game really over?  This function does not validate the game board.
+ *
+ *  Args:
+ *      board: A two-dimenstional array.
+ *
+ *  Returns:
+ *      ENOERR on game over, ENODATA for an unsolved game board, or errno on error.
+ */
+int is_game_really_over(char board[9][9]);
+
+/*
+ *  Description:
+ *      STRATEGY 1: If ~[ROW SET] && ~[COL SET] && ~[GRID SET] is one value, solve it.
+ *
+ *  Args:
+ *      board: A two-dimenstional array.
+ *      row: The row index.
+ *      col: The column index.
+ *      errnum: [Out] Provide feedback on execution.
+ *
+ *  Returns:
+ *      ENOERR for a match, ENODATA if no match was made, or errno on error.
+ */
+int make_a_match(char board[9][9], int row, int col);
+
+/*
+ *  Description:
+ *      Use strategy one to solve the board.  This function does not validate the game board.
+ *
+ *  Notes:
+ *      For each row and column that isn't solved at the intersection...
+ *      If ~[ROW SET] && ~[COL SET] && ~[GRID SET] is one value, solve it.  Declare win or continue.
+ *      If the loop ends, check for a win and return accordingly.
+ *
+ *  Args:
+ *      board: A fixed-size array of 81 characters.  Each character must be a SUDO_EMPTY_GRID
+ *          or number ranging from 1-9, inclusive.
+ *
+ *  Returns:
+ *      ENOERR on success, ENODATA for an unsolved game board, or errno on error.
+ */
+int solve_strategy_one(char board[81]);
+
+/*
+ *  Description:
+ *      Validate row and col arguments for this module.
+ *
+ *  Args:
+ *      row: The row index.
+ *      col: The column index.
+ *
+ *  Returns:
+ *      ENOERR on success, ERANGE on error.
+ */
+int validate_row_and_col(int row, int col);
+
+/**************************************************************************************************/
+/********************************** PUBLIC FUNCTION DEFINITIONS ***********************************/
+/**************************************************************************************************/
+
+
+bool is_game_over(char board[81])
+{
+    // LOCAL VARIABLES
+    int results = validate_board(board);   // Input validation
+    char (*game)[9] = (char (*)[9])board;  // Cast it to a two-dimensional array
+
+    // IS IT OVER?
+    if (ENOERR == results)
+    {
+        results = is_game_really_over(game);
+    }
+
+    // DONE
+    return results;
+}
+
+
+int solve_board(char board[81])
+{
+    // LOCAL VARIABLES
+    int results = ENOERR;  // Results of execution
+
+    // INPUT VALIDATION
+    results = validate_board(board);
+
+    // SOLVE IT
+    if (ENOERR == results)
+    {
+        // Strategy #1
+        results = solve_strategy_one(board);
+        if (ENODATA == results)
+        {
+            PRINT_ERROR(Strategy number one failed to solve the game);
+        }
+    }
+
+    // DONE
+    return results;
+}
+
+
+/**************************************************************************************************/
+/********************************** PRIVATE FUNCTION DEFINITIONS **********************************/
+/**************************************************************************************************/
+
+
+char check_for_match(char board[9][9], int row, int col, int *errnum)
+{
+    // LOCAL VARIABLES
+    int results = ENOERR;         // Results of execution
+    char miss_row[9] = { '\0' };  // Characters missing from the row
+    char miss_col[9] = { '\0' };  // Characters missing from the col
+    char miss_grd[9] = { '\0' };  // Characters missing from the grid
+    // char overlap = '\0';          // Overlap character between all three arrays
+
+    // INPUT VALIDATION
+    if (NULL == board)
+    {
+        results = EINVAL;  // We shall not abide NULL pointers
+    }
+
+    // CHECK IT
+    // Get missing row characters
+    if (ENOERR == results)
+    {
+        results = fill_missing_row(board, miss_row, row);
+        FPRINTF_ERR("MISSING ROW CONTENTS: %s\n", miss_row);  // DEBUGGING
+    }
+    // Get missing col characters
+    if (ENOERR == results)
+    {
+        results = fill_missing_col(board, miss_col, col);
+    }
+    // Get missing grid characters
+    if (ENOERR == results)
+    {
+        results = fill_missing_grid(board, miss_grd, row, col);
+    }
+    // Find overlap
+    if (ENOERR == results)
+    {
+        // TO DO: DON'T DO NOW... DEFINE THIS FUNCTIONALITY
+        results = ENOSYS;  // DEBUGGING
+        PRINT_ERRNO(results);  // DEBUGGING
+    }
+
+    // DONE
+    if (NULL != errnum)
+    {
+        *errnum = results;
+    }
+    return results;
+}
+
+
+int fill_missing_col(char board[9][9], char miss_col[9], int col)
+{
+    // LOCAL VARIABLES
+    int results = ENOERR;  // Results of execution
+
+    // INPUT VALIDATION
+    if (NULL == board || NULL == miss_col)
+    {
+        results = EINVAL;  // We shall not abide NULL pointers
+    }
+
+    // DONE
+    return results;
+}
+
+
+int fill_missing_grid(char board[9][9], char miss_grid[9], int row, int col)
+{
+    // LOCAL VARIABLES
+    int results = ENOERR;  // Results of execution
+
+    // INPUT VALIDATION
+    if (NULL == board || NULL == miss_grid)
+    {
+        results = EINVAL;  // We shall not abide NULL pointers
+    }
+
+    // DONE
+    return results;
+}
+
+
+int fill_missing_row(char board[9][9], char miss_row[9], int row)
+{
+    // LOCAL VARIABLES
+    int results = ENOERR;           // Results of execution
+    int found[10] = { 0 };          // Keep track of chars found by index (index 1 represents '1')
+    char *tmp_miss_row = miss_row;  // Iterating pointer into miss_row
+
+    // INPUT VALIDATION
+    if (NULL == board || NULL == miss_row)
+    {
+        results = EINVAL;  // We shall not abide NULL pointers
+    }
+
+    // SETUP
+    if (ENOERR == results)
+    {
+        memset(miss_row, '\0', 9 * sizeof(char));
+    }
+
+    // FILL IT
+    if (ENOERR == results)
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            if (SUDO_EMPTY_GRID != board[row][i])
+            {
+                found[board[row][i] - '0'] = 1;  // Found one
+            }
+        }
+        for (int i = 1; i <= 9; i++)
+        {
+            if (0 != found[i])
+            {
+                *tmp_miss_row = i;
+                tmp_miss_row++;
+            }
+        }
+    }
+
+    // DONE
+    return results;
+}
+
+
+bool is_empty_intersection(char board[9][9], int row, int col, int *errnum)
+{
+    // LOCAL VARIABLES
+    int results = ENOERR;   // Results of execution
+    bool is_empty = false;  // Is row && col empty?
+
+    // INPUT VALIDATION
+    results = validate_row_and_col(row, col);
+
+    // DONE
+    if (NULL != errnum)
+    {
+        *errnum = results;
+    }
+    return is_empty;
+}
+
+
+int is_game_really_over(char board[9][9])
+{
+    // LOCAL VARIABLES
+    int results = ENOERR;  // Results of execution
+
+    // IS IT REALLY OVER?
+    for (int row = 0; row < 3; row++)
+    {
+        for (int col = 0; col < 3; col++)
+        {
+            if (SUDO_EMPTY_GRID == board[row][col])
+            {
+                results = ENODATA;  // There's an empty grid
+            }
+        }
+    }
+
+    // DONE
+    return results;
+}
+
+
+int make_a_match(char board[9][9], int row, int col)
+{
+    // LOCAL VARIABLES
+    int results = ENOERR;   // Results of execution
+    bool is_empty = false;  // Is the intersection of row and col empty
+    char match = '\0';      // Match to be made
+
+    // VALIDATION
+    is_empty = is_empty_intersection(board, row, col, &results);
+    if (true == is_empty)
+    {
+        match = check_for_match(board, row, col, &results);
+        if ('\0' != match && ENOERR == results)
+        {
+            board[row][col] = match;
+        }
+    }
+    else if (ENOERR == results)
+    {
+        results = ENODATA;  // No error and intersection wasn't empty
+    }
+
+    // DONE
+    return results;
+}
+
+
+int solve_strategy_one(char board[81])
+{
+    // LOCAL VARIABLES
+    int results = ENODATA;                 // Results of execution
+    char (*game)[9] = (char (*)[9])board;  // Cast it to a two-dimensional array
+
+    // SOLVE IT
+    do
+    {
+        for (int row = 0; row < 3; row++)
+        {
+            for (int col = 0; col < 3; col++)
+            {
+                results = make_a_match(game, row, col);
+                if (ENODATA != results)
+                {
+                    break;  // Break out of the for loops
+                }
+            }
+            if (ENODATA != results)
+            {
+                break;  // Break out of the for loops
+            }
+        }
+        // Respond to results
+        if (ENOERR == results)  // Made a play
+        {
+            if (ENODATA == is_game_really_over(game))
+            {
+                continue;  // Game's not over yet
+            }
+        }
+        else if (ENODATA == results)  // Made a full loop without a play
+        {
+            PRINT_ERROR(Strategy one failed to make a play);
+            break;  // No plays to make
+        }
+        else if (ENOERR != results)
+        {
+            PRINT_ERROR(Encountered an error in strategy one);
+            break;  // Encountered an error
+        }
+    }
+    while (1);
+
+    // DONE
+    return results;
+}
+
+
+int validate_row_and_col(int row, int col)
+{
+    // LOCAL VARIABLES
+    int results = ENOERR;   // Results of execution
+
+    // INPUT VALIDATION
+    // row
+    if (row > 2 || row < 0)
+    {
+        results = ERANGE;  // Row is out of range
+        FPRINTF_ERR("%s The row %d is out of index\n", DEBUG_ERROR_STR, row);
+    }
+    // col
+    if (col > 2 || col < 0)
+    {
+        results = ERANGE;  // Column is out of range
+        FPRINTF_ERR("%s The column %d is out of index\n", DEBUG_ERROR_STR, col);
+    }
+
+    // DONE
+    return results;
+}
