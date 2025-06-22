@@ -7,7 +7,7 @@
 #include <errno.h>                          // EINVAL
 #include <stdio.h>                          // printf()
 #include <string.h>                         // strerror()
-#include "sudo_board.h"                     // create_board()
+#include "sudo_board.h"                     // create_board(), print_board()
 #include "sudo_debug.h"                     // MODULE_LOAD(), MODULE_UNLOAD()
 #include "sudo_logic.h"                     // solve_board()
 #include "sudo_macros.h"                    // ENOERR
