@@ -204,9 +204,16 @@ int solve_board(char board[81])
     int results = ENOERR;  // Results of execution
 
     // INPUT VALIDATION
-    results = validate_board(board);
-    // FPRINTF_ERR("VALIDATE BOARD RETURNED [%d] %s\n", results, strerror(results));  // DEBUGGING
-    // PRINT_ERRNO(results);  // DEBUGGING
+    results = is_game_over(board);  // Full validation
+    // Respond to results
+    if (ENOERR == results)
+    {
+        goto done;  // Game is already solved
+    }
+    else if (ENODATA == results)
+    {
+        results = ENOERR;  // Not solved but the board is valid so let's continue
+    }
 
     // SOLVE IT
     if (ENOERR == results)
@@ -230,6 +237,7 @@ int solve_board(char board[81])
     }
 
     // DONE
+done:
     return results;
 }
 
