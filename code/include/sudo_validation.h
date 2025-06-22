@@ -10,7 +10,7 @@
  *      Validate the sudoku game board.
  *
  *  Args:
- *      board: A fixed-size char array of 81 characters.  Each character must be a space,
+ *      board: A fixed-size char array of 81 characters.  Each character must be a SUDO_EMPTY_GRID,
  *          or number ranging from 1-9, inclusive.
  *
  *  Returns:
@@ -23,8 +23,8 @@ int validate_board(const char board[81]);
  *      Validate the user-provided board string.
  *
  *  Args:
- *      board_string: A nul-terminated char array of 81 characters.  Each character must be a space,
- *          or number ranging from 1-9, inclusive.
+ *      board_string: A nul-terminated char array of 81 characters.  Each character must be a
+ *			SUDO_EMPTY_GRID, or number ranging from 1-9, inclusive.
  *
  *  Returns:
  *      ENOERR on successful validation, EINVAL otherwise.

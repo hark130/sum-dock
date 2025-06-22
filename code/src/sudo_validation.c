@@ -2,14 +2,14 @@
  *  This library defines functionality to validate arguments on behalf of SUDO.
  */
 
-#define SKID_DEBUG                          // Enable DEBUG logging
+#define SUDO_DEBUG                          // Enable DEBUG logging
 
 #include <errno.h>                          // EINVAL
 #include <stddef.h>                         // size_t
 #include <stdio.h>                          // fprintf()
 #include <string.h>                         // strlen()
 #include "sudo_debug.h"                     // MODULE_*LOAD(), PRINT_ERRNO(), PRINT_ERROR()
-#include "sudo_macros.h"                    // ENOERR, SUDO_BOARD_LEN
+#include "sudo_macros.h"                    // ENOERR, SUDO_BOARD_LEN, SUDO_EMPTY_GRID
 
 MODULE_LOAD();  // Print the module name being loaded using the gcc constructor attribute
 MODULE_UNLOAD();  // Print the module name being unloaded using the gcc destructor attribute
@@ -128,7 +128,7 @@ int validate_board_entry(char board_entry)
 {
     // LOCAL VARIABLES
     int results = EINVAL;  // The results of validation
-    char valid_entries[] = { '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ' };
+    char valid_entries[] = { '1', '2', '3', '4', '5', '6', '7', '8', '9', SUDO_EMPTY_GRID };
 
     // VALIDATE IT
     for (int i = 0; i < (sizeof(valid_entries) / sizeof(valid_entries[0])); i++)

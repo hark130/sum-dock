@@ -10,8 +10,8 @@
  *      Copy the board_string into heap-allocated memory.
  *
  *  Args:
- *      board_string: A nul-terminated char array of 81 characters.  Each character must be a space,
- *          or number ranging from 1-9, inclusive.
+ *      board_string: A nul-terminated char array of 81 characters.  Each character must be a
+ *			SUDO_EMPTY_GRID or number ranging from 1-9, inclusive.
  *      errnum: [Out] Provide feedback on execution.
  *
  *  Returns:
@@ -25,7 +25,7 @@ char *create_board(const char *board_string, int *errnum);
  *      Print a human-readable version of the board.
  *
  *  Args:
- *      board_string: A nul-terminated char array of 81 characters.  Each character must be a space,
+ *      board: A fixed-size array of 81 characters.  Each character must be a SUDO_EMPTY_GRID
  *          or number ranging from 1-9, inclusive.
  *
  *  Returns:

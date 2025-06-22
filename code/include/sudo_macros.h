@@ -18,5 +18,7 @@
 #define SUDO_MAX_SZ (~(size_t)0)  // Library's value for the maximum size_t value
 // SUDO_BOARD_LEN
 #define SUDO_BOARD_LEN ((size_t)81)  // Expected length of the board string and size of game board
+// SUDO_EMPTY_GRID
+#define SUDO_EMPTY_GRID ((char)' ')  // An empty grid position
 
 #endif  /* __SUDO_MACROS__ */
