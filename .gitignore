@@ -1,5 +1,6 @@
 # REPO
 code/test/test_output/
+*.bak
 
 # Prerequisites
 *.d
