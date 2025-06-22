@@ -2,7 +2,7 @@
  *  This library defines functionality to allocate and free memory on behalf of SUDO.
  */
 
-#define SKID_DEBUG                          // Enable DEBUG logging
+#define SUDO_DEBUG                          // Enable DEBUG logging
 
 #include <errno.h>                          // errno
 #include <stdlib.h>                         // calloc()
