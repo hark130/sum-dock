@@ -7,6 +7,7 @@
 #include "errno.h"                          // EINVAL
 #include "sudo_board.h"                     // create_board()
 #include "sudo_debug.h"                     // MODULE_LOAD(), MODULE_UNLOAD()
+#include "sudo_logic.h"                     // solve_board()
 #include "sudo_macros.h"                    // ENOERR
 #include "sudo_memory.h"                    // free_sudo_mem()
 
@@ -47,12 +48,34 @@ int main(int argc, char *argv[])
     }
 
     // SUDO IT!
+    // Create the game board
     if (ENOERR == results)
     {
         game_board = create_board(argv[1], &results);
     }
+    // Print the starting board
     if (ENOERR == results)
     {
+        printf("Starting board:\n");
+        results = print_board(game_board);
+    }
+    // Solve the game board
+    if (ENOERR == results)
+    {
+        results = solve_board(game_board);
+        // Determine results
+        if (ENOERR == results)
+        {
+            printf("Board solved!\n");
+        }
+        else if (ENODATA == results)
+        {
+            printf("Failed to solve the board.\n");
+        }
+        else
+        {
+            printf("The game logic encountered an error: %s?!\n", strerror(results));
+        }
         results = print_board(game_board);
     }
 
@@ -63,7 +86,7 @@ int main(int argc, char *argv[])
     }
 
     // DONE
-    if (ENOERR != results)
+    if (ENOERR != results && ENODATA == results)
     {
         print_usage(argv[0]);
     }
