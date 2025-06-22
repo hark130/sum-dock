@@ -2,7 +2,7 @@
  *  This library defines functionality to validate arguments on behalf of SUDO.
  */
 
-#define SUDO_DEBUG                          // Enable DEBUG logging
+// #define SUDO_DEBUG                          // Enable DEBUG logging
 
 #include <errno.h>                          // EINVAL
 #include <stddef.h>                         // size_t

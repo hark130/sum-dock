@@ -2,7 +2,7 @@
  *  This library defines game logic functionality to solve a game board.
  */
 
-#define SUDO_DEBUG                          // Enable DEBUG logging
+// #define SUDO_DEBUG                          // Enable DEBUG logging
 
 #include <errno.h>                          // EINVAL, ENODATA
 #include <stdbool.h>                        // bool, false, true
