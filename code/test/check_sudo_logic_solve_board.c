@@ -124,23 +124,74 @@ START_TEST(test_n03_hard_sudoku)
 END_TEST
 
 
+// Take from: https://sudoku.com/expert/
+// Manually execute this test case: ./code/dist/sum_dock.bin "   572136 52     7        5 7 6 15  5  9     2   85 6441 36    6     74    4 96 3"
 START_TEST(test_n04_expert_sudoku)
 {
+    // LOCAL VARIABLES
+    int exp_return = ENOERR;  // Expected return value for this test case
+    char *exp_result = NULL;  // Expected results for this test case
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "   572136"
+                            " 52     7"
+                            "        5"
+                            " 7 6 15  "
+                            "5  9     "
+                            "2   85 64"
+                            "41 36    "
+                            "6     74 "
+                            "   4 96 3" };
 
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
 }
 END_TEST
 
 
+// Take from: https://sudoku.com/evil/
+// Manually execute this test case: ./code/dist/sum_dock.bin "   9   6764  5    8      5   54  3769 2 78   3  56   2 9   2 1 2 8       5    4  "
 START_TEST(test_n05_master_sudoku)
 {
+    // LOCAL VARIABLES
+    int exp_return = ENOERR;  // Expected return value for this test case
+    char *exp_result = NULL;  // Expected results for this test case
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "   9   67"
+                            "64  5    "
+                            "8      5 "
+                            "  54  376"
+                            "9 2 78   "
+                            "3  56   2"
+                            " 9   2 1 "
+                            "2 8      "
+                            " 5    4  " };
 
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
 }
 END_TEST
 
 
+// Take from: https://sudoku.com/extreme/
+// Manually execute this test case: ./code/dist/sum_dock.bin "       79  4         67 5  9   81       397 6 7       3 2   6  56      3   8    4"
 START_TEST(test_n06_extreme_sudoku)
 {
+    // LOCAL VARIABLES
+    int exp_return = ENOERR;  // Expected return value for this test case
+    char *exp_result = NULL;  // Expected results for this test case
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "       79"
+                            "  4      "
+                            "   67 5  "
+                            "9   81   "
+                            "    397 6"
+                            " 7       "
+                            "3 2   6  "
+                            "56      3"
+                            "   8    4" };
 
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
 }
 END_TEST
 
