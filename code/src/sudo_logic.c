@@ -6,7 +6,6 @@
 
 #include <errno.h>                          // EINVAL, ENODATA
 #include <stdbool.h>                        // bool, false, true
-#include <stdio.h>                          // DEBUGGING
 #include <string.h>                         // memset()
 #include "sudo_debug.h"                     // MODULE_*LOAD(), PRINT_ERRNO(), PRINT_ERROR()
 #include "sudo_macros.h"                    // ENOERR
@@ -187,7 +186,6 @@ int is_game_over(char board[81])
     char (*game)[9] = (char (*)[9])board;  // Cast it to a two-dimensional array
 
     // IS IT OVER?
-    // PRINT_ERROR(HERE);  // DEBUGGING
     if (ENOERR == results)
     {
         results = is_game_really_over(game);
@@ -266,23 +264,17 @@ char check_for_match(char board[9][9], int row, int col, int *errnum)
     // Get missing row characters
     if (ENOERR == results)
     {
-        // FPRINTF_ERR("MISSING ROW CONTENTS BEFORE: %s\n", miss_row);  // DEBUGGING
         results = fill_missing_row(board, miss_row, row);
-        // FPRINTF_ERR("MISSING ROW CONTENTS AFTER:  %s\n", miss_row);  // DEBUGGING
     }
     // Get missing col characters
     if (ENOERR == results)
     {
-        // FPRINTF_ERR("MISSING COL %d CONTENTS BEFORE: %s\n", col, miss_col);  // DEBUGGING
         results = fill_missing_col(board, miss_col, col);
-        // FPRINTF_ERR("MISSING COL %d CONTENTS AFTER:  %s\n", col, miss_col);  // DEBUGGING
     }
     // Get missing grid characters
     if (ENOERR == results)
     {
-        // FPRINTF_ERR("MISSING ROW %d COL %d CONTENTS BEFORE: %s\n", row, col, miss_grd);  // DEBUGGING
         results = fill_missing_grid(board, miss_grd, row, col);
-        // FPRINTF_ERR("MISSING ROW %d COL %d CONTENTS AFTER:  %s\n", row, col, miss_grd);  // DEBUGGING
     }
     // Find overlap
     if (ENOERR == results)
@@ -316,7 +308,6 @@ char check_for_match(char board[9][9], int row, int col, int *errnum)
                     }
                     else
                     {
-                        // FPRINTF_ERR("FOUND A MATCH BETWEEN ROW %d AND COL %d: %c!\n", row, col, miss_grd[grid_index]);  // DEBUGGING
                         if (ENOERR == results)
                         {
                             results = ENODATA;  // A second solution was found so...
@@ -340,14 +331,6 @@ done:
     {
         *errnum = results;
     }
-    /* DEBUGGING */
-    // if (ENOERR == results)
-    // {
-    //     FPRINTF_ERR("MISSING ROW %d CONTENTS AFTER:  %s\n", row, miss_row);  // DEBUGGING
-    //     FPRINTF_ERR("MISSING COL %d CONTENTS AFTER:  %s\n", col, miss_col);  // DEBUGGING
-    //     FPRINTF_ERR("MISSING ROW %d COL %d CONTENTS AFTER:  %s\n", row, col, miss_grd);  // DEBUGGING
-    // }
-    /* DEBUGGING */
     return overlap;
 }
 
@@ -460,7 +443,6 @@ int fill_missing_grid(char board[9][9], char miss_grid[9], int row, int col)
     if (ENOERR == results)
     {
         grid_num = determine_grid(row, col, &results);
-        // FPRINTF_ERR("ROW %d AND COL %d IS IN GRID %d\n", row, col, grid_num);  // DEBUGGING
     }
     // Get the values from that grid
     if (ENOERR == results)
@@ -548,7 +530,6 @@ bool is_empty_intersection(char board[9][9], int row, int col, int *errnum)
     // IS IT EMPTY?
     if (ENOERR == results)
     {
-        // FPRINTF_ERR("ROW %d COL %d is %c\n", row, col, board[row][col]);  // DEBUGGING
         if (SUDO_EMPTY_GRID == board[row][col])
         {
             is_empty = true;
@@ -570,14 +551,12 @@ int is_game_really_over(char board[9][9])
     int results = ENOERR;  // Results of execution
 
     // IS IT REALLY OVER?
-    // PRINT_ERROR(HERE);  // DEBUGGING
     for (int row = 0; row < 9; row++)
     {
         for (int col = 0; col < 9; col++)
         {
             if (SUDO_EMPTY_GRID == board[row][col])
             {
-                // FPRINTF_ERR("FOUND AN EMPTY GRID AT ROW %d COL %d\n", row, col);  // DEBUGGING
                 results = ENODATA;  // There's an empty grid
                 goto done;  // No need to search for anymore empty grids
             }
@@ -586,7 +565,6 @@ int is_game_really_over(char board[9][9])
 
     // DONE
 done:
-    // FPRINTF_ERR("ABOUT TO RETURN [%d] '%s' from %s\n", results, strerror(results), __FUNCTION_NAME__);  // DEBUGGING
     return results;
 }
 
@@ -600,29 +578,12 @@ int make_a_match(char board[9][9], int row, int col)
 
     // VALIDATION
     is_empty = is_empty_intersection(board, row, col, &results);
-    // PRINT_ERROR(IS IT EMPTY?);  // DEBUGGING
     if (true == is_empty)
     {
-        // PRINT_ERROR(IT IS EMPTY!);  // DEBUGGING
         match = check_for_match(board, row, col, &results);
         if ('\0' != match && ENOERR == results)
         {
-            // FPRINTF_ERR("FOUND SOLUTION AT ROW %d COL %d: %c\n", row, col, match);  // DEBUGGING
             board[row][col] = match;
-            /* DEBUGGING */
-            // for (int row_index = 0; row_index < 9; row_index++)
-            // {
-            //     for (int col_index = 0; col_index < 9; col_index++)
-            //     {
-            //         if (0 == col_index)
-            //         {
-            //             printf("\n");
-            //         }
-            //         printf("%c", board[row_index][col_index]);
-            //     }
-            // }
-            // printf("\n");
-            /* DEBUGGING */
         }
     }
     else if (ENOERR == results)
@@ -648,9 +609,7 @@ int solve_strategy_one(char board[81])
         {
             for (int col = 0; col < 9; col++)
             {
-                // FPRINTF_ERR("EVALUATING ROW %d COL %d\n", row, col);  // DEBUGGING
                 results = make_a_match(game, row, col);
-                // FPRINTF_ERR("make_a_match() returned [%d] %s\n", results, strerror(results));  // DEBUGGING
                 if (ENODATA != results)
                 {
                     break;  // Break out of the for loops

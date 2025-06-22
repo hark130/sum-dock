@@ -382,7 +382,6 @@ int validate_board_entries(const char board[81])
             results = validate_board_entry(board[i]);
             if (ENOERR != results)
             {
-                // PRINT_ERRNO(results);  // DEBUGGING
                 FPRINTF_ERR("%s %s found an invalid character at index %zu: [%d] '%c'\n",
                             DEBUG_WARNG_STR, __FUNCTION_NAME__, i, board[i], board[i]);
                 break;  // Stop looking because we found a board violation
@@ -402,7 +401,6 @@ int validate_board_entry(char board_entry)
     char valid_entries[] = { '1', '2', '3', '4', '5', '6', '7', '8', '9', SUDO_EMPTY_GRID };
 
     // VALIDATE IT
-    // FPRINTF_ERR("VALIDATING BOARD ENTRY: [%d] %c\n", board_entry, board_entry);  // DEBUGGING
     for (int i = 0; i < (sizeof(valid_entries) / sizeof(valid_entries[0])); i++)
     {
         if (board_entry == valid_entries[i])
