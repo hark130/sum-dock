@@ -2,7 +2,7 @@
  *  This library defines functionality to manage the game board on behalf of SUDO.
  */
 
-#define SUDO_DEBUG                          // Enable DEBUG logging
+// #define SUDO_DEBUG                          // Enable DEBUG logging
 
 #include <errno.h>                          // EINVAL
 #include <stdio.h>                          // printf()
