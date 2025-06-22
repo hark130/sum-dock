@@ -205,6 +205,7 @@ int solve_board(char board[81])
 
     // INPUT VALIDATION
     results = validate_board(board);
+    // PRINT_ERRNO(results);  // DEBUGGING
 
     // SOLVE IT
     if (ENOERR == results)
@@ -582,7 +583,7 @@ int make_a_match(char board[9][9], int row, int col)
         match = check_for_match(board, row, col, &results);
         if ('\0' != match && ENOERR == results)
         {
-            FPRINTF_ERR("FOUND SOLUTION AT ROW %d COL %d: %c\n", row, col, match);
+            // FPRINTF_ERR("FOUND SOLUTION AT ROW %d COL %d: %c\n", row, col, match);  // DEBUGGING
             board[row][col] = match;
             /* DEBUGGING */
             for (int row_index = 0; row_index < 9; row_index++)
