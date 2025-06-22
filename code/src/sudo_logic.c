@@ -205,6 +205,7 @@ int solve_board(char board[81])
 
     // INPUT VALIDATION
     results = validate_board(board);
+    // FPRINTF_ERR("VALIDATE BOARD RETURNED [%d] %s\n", results, strerror(results));  // DEBUGGING
     // PRINT_ERRNO(results);  // DEBUGGING
 
     // SOLVE IT
@@ -222,6 +223,10 @@ int solve_board(char board[81])
     if (ENOERR == results)
     {
         results = is_game_over(board);  // Full validation
+        if (ENOERR != results)
+        {
+            PRINT_ERROR(Game logic reported success but the game board failed validation);
+        }
     }
 
     // DONE
