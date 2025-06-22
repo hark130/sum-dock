@@ -3,7 +3,7 @@
  *
  *  Copy/paste the following from the repo's top-level directory...
 
-make -C code dist/check_sudo_logic_solve_board.bin
+make -C code dist/check_sudo_logic_solve_board.bin && \
 code/dist/check_sudo_logic_solve_board.bin && CK_FORK=no valgrind --leak-check=full --show-leak-kinds=all code/dist/check_sudo_logic_solve_board.bin
 
  *
