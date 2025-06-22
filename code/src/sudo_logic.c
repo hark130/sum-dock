@@ -218,6 +218,12 @@ int solve_board(char board[81])
         }
     }
 
+    // VERIFY
+    if (ENOERR == results)
+    {
+        results = is_game_over(board);  // Full validation
+    }
+
     // DONE
     return results;
 }
