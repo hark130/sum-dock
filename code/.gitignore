@@ -1,6 +1,5 @@
-# REPO
-code/test/test_output/
-*.bak
+# PROJECT DIRECTORIES
+dist/
 
 # Prerequisites
 *.d
@@ -33,6 +32,7 @@ code/test/test_output/
 *.dylib
 
 # Executables
+*.bin
 *.exe
 *.out
 *.app
