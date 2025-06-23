@@ -348,6 +348,7 @@ END_TEST
 
 // Take from: https://sudoku.com/hard/
 // Manually execute this test case: ./code/dist/sum_dock.bin " 7 6293  3   5        7   14 7    13   2   87 8  9   4 32 86   5  4    2  49 2  8"
+// This board may require a sudo_logic make_a_grid_match_perp() implementation.
 START_TEST(test_n13_hard_sudoku_2)
 {
     // LOCAL VARIABLES
