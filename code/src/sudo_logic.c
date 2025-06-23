@@ -2,7 +2,7 @@
  *  This library defines game logic functionality to solve a game board.
  */
 
-// #define SUDO_DEBUG                          // Enable DEBUG logging
+#define SUDO_DEBUG                          // Enable DEBUG logging
 
 #include <errno.h>                          // EINVAL, ENODATA
 #include <stdbool.h>                        // bool, false, true
@@ -432,16 +432,19 @@ int solve_board(char board[81])
     // SOLVE IT
     if (ENOERR == results)
     {
-        // Strategy #1
-        results = solve_strategy_one(board);
-        if (ENODATA == results)
+        // Loop through a number of times equal to the strategies implemented
+        for (int i = 0; i < 2; i++)
         {
-            PRINT_ERROR(Strategy number one failed to solve the game);
-            // Strategy #2
-            results = solve_strategy_two(board);
+            // Strategy #1
+            results = solve_strategy_one(board);
             if (ENODATA == results)
             {
-                PRINT_ERROR(Strategy number two failed to solve the game);
+                // Strategy #2
+                results = solve_strategy_two(board);
+            }
+            if (ENOERR == results)
+            {
+                break;  // Game was solved!
             }
         }
     }
@@ -1335,6 +1338,7 @@ int solve_strategy_one(char board[81])
         // Respond to results
         if (ENOERR == results)  // Made a play
         {
+            PRINT_ERROR(Strategy one made a play);
             results = is_game_really_over(game);  // Is it over yet?
             if (ENODATA == results)
             {
@@ -1384,6 +1388,7 @@ int solve_strategy_two(char board[81])
         // Respond to results
         if (ENOERR == results)  // Made a play
         {
+            PRINT_ERROR(Strategy two made a play);
             results = is_game_really_over(game);  // Is it over yet?
             if (ENODATA == results)
             {
