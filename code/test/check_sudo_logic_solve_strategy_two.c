@@ -128,6 +128,190 @@ START_TEST(test_n03_row_test_3)
 END_TEST
 
 
+// Manually execute this test case: ./code/dist/sum_dock.bin "         4        7         1                           1                        "
+START_TEST(test_n04_col_test_1)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENODATA;  // Expected return value for this test case
+    // Expected results for this test case
+    char *exp_result = "         4        7         1                           1                        ";
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "         "
+                            "4        "
+                            "7        "
+                            " 1       "
+                            "         "
+                            "         "
+                            "  1      "
+                            "         "
+                            "         " };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+// Manually execute this test case: ./code/dist/sum_dock.bin "                       5       2                 8       5                       "
+START_TEST(test_n05_col_test_2)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENODATA;  // Expected return value for this test case
+    // Expected results for this test case
+    char exp_result[81] = { "         "
+                            "         "
+                            "     5   "
+                            "    2    "
+                            "    5    "
+                            "    8    "
+                            "   5     "
+                            "         "
+                            "         " };
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "         "
+                            "         "
+                            "     5   "
+                            "    2    "
+                            "         "
+                            "    8    "
+                            "   5     "
+                            "         "
+                            "         " };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+// Manually execute this test case: ./code/dist/sum_dock.bin "                        9                           9         3        6      78 "
+START_TEST(test_n06_col_test_3)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENODATA;  // Expected return value for this test case
+    // Expected results for this test case
+    char exp_result[81] = { "         "
+                            "         "
+                            "      9  "
+                            "         "
+                            "         "
+                            "       9 "
+                            "        3"
+                            "        6"
+                            "      789" };
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "         "
+                            "         "
+                            "      9  "
+                            "         "
+                            "         "
+                            "       9 "
+                            "        3"
+                            "        6"
+                            "      78 " };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+// Manually execute this test case: ./code/dist/sum_dock.bin "  3         1     7 9       1                                                    "
+START_TEST(test_n07_perp_test_1)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENODATA;  // Expected return value for this test case
+    // Expected results for this test case
+    char exp_result[81] = { "1 3      "
+                            "   1     "
+                            "7 9      "
+                            " 1       "
+                            "         "
+                            "         "
+                            "         "
+                            "         "
+                            "         " };
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "  3      "
+                            "   1     "
+                            "7 9      "
+                            " 1       "
+                            "         "
+                            "         "
+                            "         "
+                            "         "
+                            "         " };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+// Manually execute this test case: ./code/dist/sum_dock.bin "                              1     3           7 9                         3    "
+START_TEST(test_n08_perp_test_2)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENODATA;  // Expected return value for this test case
+    // Expected results for this test case
+    char exp_result[81] = { "         "
+                            "         "
+                            "         "
+                            "   1 3   "
+                            "3        "
+                            "   7 9   "
+                            "         "
+                            "         "
+                            "    3    " };
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "         "
+                            "         "
+                            "         "
+                            "   1     "
+                            "3        "
+                            "   7 9   "
+                            "         "
+                            "         "
+                            "    3    " };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
+// Manually execute this test case: ./code/dist/sum_dock.bin "      9                                                      23     9         78 "
+START_TEST(test_n09_perp_test_3)
+{
+    // LOCAL VARIABLES
+    int exp_return = ENODATA;  // Expected return value for this test case
+    // Expected results for this test case
+    char exp_result[81] = { "      9  "
+                            "         "
+                            "         "
+                            "         "
+                            "         "
+                            "         "
+                            "       23"
+                            "     9   "
+                            "      789" };
+    // The sudoku puzzle for this test case
+    char test_input[81] = { "      9  "
+                            "         "
+                            "         "
+                            "         "
+                            "         "
+                            "         "
+                            "       23"
+                            "     9   "
+                            "      78 " };
+
+    // RUN TEST
+    run_test_case(test_input, exp_result, exp_return);
+}
+END_TEST
+
+
 /**************************************************************************************************/
 /**************************************** ERROR TEST CASES ****************************************/
 /**************************************************************************************************/
@@ -233,6 +417,12 @@ Suite *create_test_suite(void)
     tcase_add_test(tc_normal, test_n01_row_test_1);
     tcase_add_test(tc_normal, test_n02_row_test_2);
     tcase_add_test(tc_normal, test_n03_row_test_3);
+    tcase_add_test(tc_normal, test_n04_col_test_1);
+    tcase_add_test(tc_normal, test_n05_col_test_2);
+    tcase_add_test(tc_normal, test_n06_col_test_3);
+    tcase_add_test(tc_normal, test_n07_perp_test_1);
+    tcase_add_test(tc_normal, test_n08_perp_test_2);
+    tcase_add_test(tc_normal, test_n09_perp_test_3);
     tcase_add_test(tc_error, test_e01_bad_pointer);
     tcase_add_test(tc_boundary, test_b01_almost_solved);
     tcase_add_test(tc_boundary, test_b02_almost_empty);
