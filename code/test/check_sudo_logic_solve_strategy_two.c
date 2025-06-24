@@ -25,10 +25,11 @@ export CK_RUN_CASE="Special" && ./code/dist/check_sudo_logic_solve_strategy_two.
 
 #include <check.h>                      // START_TEST(), END_TEST, Suite
 #include <errno.h>                      // EINVAL, ENODATA
+#include <stdio.h>                      // printf()
 #include <stdlib.h>                     // EXIT_FAILURE, EXIT_SUCCESS
 // Local includes
 // #include "sudo_logic.h"                 // solve_strategy_two() (Not exposed)
-#include "sudo_macros.h"                // ENOERR
+#include "sudo_macros.h"                // ENOERR, SUDO_EMPTY_GRID
 #include "unit_test_code.h"             // CANARY_INT, free_devops_mem()
 
 /*
@@ -39,6 +40,12 @@ int solve_strategy_two(char board[81]);
 /**************************************************************************************************/
 /************************************ HELPER CODE DECLARATION *************************************/
 /**************************************************************************************************/
+
+/*
+ *  Count the number of solutions in the game_board (e.g., empty board returns 0,
+ *  full board returns 81).  Returns 0 on error (e.g., NULL pointer).
+ */
+int count_solutions(char game_board[81]);
 
 /*
  *  Create the Check test suite.
@@ -134,7 +141,15 @@ START_TEST(test_n04_col_test_1)
     // LOCAL VARIABLES
     int exp_return = ENODATA;  // Expected return value for this test case
     // Expected results for this test case
-    char *exp_result = "         4        7         1                           1                        ";
+    char exp_result[81] = { "1        "
+                            "4        "
+                            "7        "
+                            " 1       "
+                            "         "
+                            "         "
+                            "  1      "
+                            "         "
+                            "         "  };
     // The sudoku puzzle for this test case
     char test_input[81] = { "         "
                             "4        "
@@ -404,6 +419,28 @@ END_TEST
 /**************************************************************************************************/
 
 
+int count_solutions(char game_board[81])
+{
+    // LOCAL VARIABLES
+    int num_sols = 0;  // Number of solutions in the game board
+
+    // INPUT VALIDATION
+    if (NULL != game_board)
+    {
+        for (int i = 0; i < 81; i++)
+        {
+            if (SUDO_EMPTY_GRID != game_board[i])
+            {
+                num_sols++;
+            }
+        }
+    }
+
+    // DONE
+    return num_sols;
+}
+
+
 Suite *create_test_suite(void)
 {
     // LOCAL VARIABLES
@@ -451,7 +488,7 @@ void run_test_case(char test_input[81], char exp_solution[81], int exp_return)
                   "instead of [%d] '%s'\n", actual_ret, strerror(actual_ret),
                   exp_return, strerror(exp_return));
     // Check test_input against exp_solution
-    if (NULL != exp_solution && NULL != test_input && ENOERR == exp_return)
+    if (NULL != exp_solution && NULL != test_input && EINVAL != exp_return)
     {
         ck_assert_msg(0 == memcmp(test_input, exp_solution,
                                   SUDO_BOARD_LEN * sizeof(exp_solution[0])),
