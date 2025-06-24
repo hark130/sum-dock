@@ -810,6 +810,9 @@ int get_grid_entries(char board[9][9], char grid_entries[9], int grid_num)
     // INPUT VALIDATION
     if (NULL == board || NULL == grid_entries || grid_num < 1 || grid_num > 9)
     {
+        // FPRINTF_ERR("BOARD: %p\n", board);  // DEBUGGING
+        // FPRINTF_ERR("GRID ENTRIES: %p\n", grid_entries);  // DEBUGGING
+        // FPRINTF_ERR("GRID NUM: %d\n", grid_num);  // DEBUGGING
         results = EINVAL;
     }
     else
@@ -976,10 +979,13 @@ int make_a_grid_match(char board[9][9], int grid_num)
 
     // VALIDATION
     // Determine current entries
+    // FPRINTF_ERR("BOARD: %p\n", board);  // DEBUGGING
+    // FPRINTF_ERR("GRID ENTRIES: %p\n", grd_entries);  // DEBUGGING
+    // FPRINTF_ERR("GRID NUM: %d\n", grid_num);  // DEBUGGING
     results = get_grid_entries(board, grd_entries, grid_num);
     if (ENOERR != results)
     {
-        PRINT_ERROR(The get_grid_entries functions detected and error);
+        PRINT_ERROR(The get_grid_entries functions detected an error);
         PRINT_ERRNO(results);
     }
     // Is there room?
@@ -1378,11 +1384,22 @@ int solve_strategy_two(char board[81])
     int results = ENODATA;                 // Results of execution
     char (*game)[9] = (char (*)[9])board;  // Cast it to a two-dimensional array
 
+    // INPUT VALIDATION
+    if (NULL == board)
+    {
+        results = EINVAL;
+        goto done;
+    }
+
     // SOLVE IT
     do
     {
         for (int grid_num = 1; grid_num <= 9; grid_num++)
         {
+            // PRINT_ERROR(HERE);  // DEBUGGING
+            // FPRINTF_ERR("BOARD (GAME): %p\n", game);  // DEBUGGING
+            // FPRINTF_ERR("GRID ENTRIES: %p\n", grd_entries);  // DEBUGGING
+            // FPRINTF_ERR("GRID NUM: %d\n", grid_num);  // DEBUGGING
             results = make_a_grid_match(game, grid_num);
         }
         // Respond to results
@@ -1418,6 +1435,7 @@ int solve_strategy_two(char board[81])
     while (1);
 
     // DONE
+done:
     return results;
 }
 
